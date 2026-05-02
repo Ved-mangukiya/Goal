@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timers — Om</title>
+  <script type="module" crossorigin src="/Goal/assets/timetable-utils-BZjoTWl5.js"></script>
+  <script type="module" crossorigin src="/Goal/assets/om-main-WXwc8blh.js"></script>
+  <link rel="stylesheet" crossorigin href="/Goal/assets/timetable-utils-g5k03O97.css">
+</head>
+
+<body class="site-minimal" data-om-page="timers">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:720px;"></div>
+
+  <div class="app-wrap app-wrap--narrow" id="main-app">
+    <header class="site-header site-header--minimal">
+      <div class="brand">
+        <span class="brand-title">Timers</span>
+        <span class="brand-sub">Same clocks as Study — one session at a time.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill status-pill--quiet" id="today-label">Today</span>
+      </div>
+    </header>
+
+    <nav class="app-nav app-nav--minimal" id="main-nav" aria-label="Site pages">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./schedule.html">Study</a>
+      <a class="nav-link" href="./plan.html">Plan</a>
+      <a class="nav-link nav-link-active" href="./timers.html" aria-current="page">Timers</a>
+      <a class="nav-link" href="./tasks.html">Tasks</a>
+      <a class="nav-link" href="./history.html">History</a>
+      <a class="nav-link" href="./settings.html">Settings</a>
+    </nav>
+
+    <p class="page-lede">Detailed totals by week and month. Quick controls below.</p>
+
+    <section class="section section--flat">
+      <div class="timer-grid timer-grid--minimal">
+        <article class="timer-card timer-card--minimal">
+          <h3 class="timer-card__name">Physics</h3>
+          <p class="timer-stat"><span>Today</span> <strong id="today-Physics" data-today-total="Physics">0s</strong></p>
+          <p class="timer-stat"><span>Week</span> <strong id="week-Physics">—</strong></p>
+          <p class="timer-stat"><span>Month</span> <strong id="month-Physics">—</strong></p>
+          <p class="timer-live" data-running-live="Physics" id="running-Physics">—</p>
+          <div class="timer-actions timer-actions--inline">
+            <button type="button" class="btn btn-timer-start btn-primary timer-subject-start" data-subject="Physics" id="start-Physics">Start</button>
+            <button type="button" class="btn btn-timer-stop timer-subject-stop" data-subject="Physics" id="stop-Physics" disabled>Stop</button>
+          </div>
+        </article>
+        <article class="timer-card timer-card--minimal">
+          <h3 class="timer-card__name">Chemistry</h3>
+          <p class="timer-stat"><span>Today</span> <strong id="today-Chemistry" data-today-total="Chemistry">0s</strong></p>
+          <p class="timer-stat"><span>Week</span> <strong id="week-Chemistry">—</strong></p>
+          <p class="timer-stat"><span>Month</span> <strong id="month-Chemistry">—</strong></p>
+          <p class="timer-live" data-running-live="Chemistry" id="running-Chemistry">—</p>
+          <div class="timer-actions timer-actions--inline">
+            <button type="button" class="btn btn-timer-start btn-primary timer-subject-start" data-subject="Chemistry" id="start-Chemistry">Start</button>
+            <button type="button" class="btn btn-timer-stop timer-subject-stop" data-subject="Chemistry" id="stop-Chemistry" disabled>Stop</button>
+          </div>
+        </article>
+        <article class="timer-card timer-card--minimal">
+          <h3 class="timer-card__name">Mathematics</h3>
+          <p class="timer-stat"><span>Today</span> <strong id="today-Mathematics" data-today-total="Mathematics">0s</strong></p>
+          <p class="timer-stat"><span>Week</span> <strong id="week-Mathematics">—</strong></p>
+          <p class="timer-stat"><span>Month</span> <strong id="month-Mathematics">—</strong></p>
+          <p class="timer-live" data-running-live="Mathematics" id="running-Mathematics">—</p>
+          <div class="timer-actions timer-actions--inline">
+            <button type="button" class="btn btn-timer-start btn-primary timer-subject-start" data-subject="Mathematics" id="start-Mathematics">Start</button>
+            <button type="button" class="btn btn-timer-stop timer-subject-stop" data-subject="Mathematics" id="stop-Mathematics" disabled>Stop</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+</body>
+
+</html>

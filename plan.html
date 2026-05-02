@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan — Om</title>
+  <script type="module" crossorigin src="/Goal/assets/timetable-utils-BZjoTWl5.js"></script>
+  <script type="module" crossorigin src="/Goal/assets/om-main-WXwc8blh.js"></script>
+  <link rel="stylesheet" crossorigin href="/Goal/assets/timetable-utils-g5k03O97.css">
+</head>
+
+<body class="site-minimal" data-om-page="plan">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:720px;"></div>
+
+  <div class="app-wrap app-wrap--narrow" id="main-app">
+    <header class="site-header site-header--minimal">
+      <div class="brand">
+        <span class="brand-title">Plan</span>
+        <span class="brand-sub">Choose your active prep week — it syncs to Study.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill status-pill--quiet" id="today-label">Today</span>
+      </div>
+    </header>
+
+    <nav class="app-nav app-nav--minimal" id="main-nav" aria-label="Site pages">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./schedule.html">Study</a>
+      <a class="nav-link nav-link-active" href="./plan.html" aria-current="page">Plan</a>
+      <a class="nav-link" href="./timers.html">Timers</a>
+      <a class="nav-link" href="./tasks.html">Tasks</a>
+      <a class="nav-link" href="./history.html">History</a>
+      <a class="nav-link" href="./settings.html">Settings</a>
+    </nav>
+
+    <section class="section section--flat">
+      <h2 class="section-label">Active week</h2>
+      <p class="section-hint">Saved automatically. Study uses this for today’s block text.</p>
+      <div class="field" style="max-width:28rem;margin-bottom:1rem;">
+        <label for="plan-week-select">Week</label>
+        <select id="plan-week-select" aria-describedby="plan-week-meta"></select>
+      </div>
+      <p id="plan-week-meta" class="section-desc" style="margin-bottom:1.25rem;">—</p>
+      <div id="plan-detail-root"></div>
+    </section>
+  </div>
+
+</body>
+
+</html>

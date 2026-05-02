@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Om — IIT Bombay JEE Study Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="/Goal/assets/timetable-utils-BZjoTWl5.js"></script>
+  <script type="module" crossorigin src="/Goal/assets/om-main-WXwc8blh.js"></script>
+  <link rel="stylesheet" crossorigin href="/Goal/assets/timetable-utils-g5k03O97.css">
+</head>
+
+<body class="site-minimal" data-om-page="home">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:760px;"></div>
+
+  <div class="app-wrap app-wrap--home" id="main-app">
+    <header class="site-header site-header--home">
+      <div class="brand">
+        <span class="brand-greeting" id="greeting-text">Good morning,</span>
+        <span class="brand-title">Om</span>
+        <span class="brand-target">Target: IIT Bombay · AIR &lt; 100</span>
+        <span class="brand-sub" id="today-label">Loading…</span>
+      </div>
+      <div class="header-actions">
+        <a class="btn btn-ghost btn--small" href="./settings.html">⚙️ Settings</a>
+      </div>
+    </header>
+
+    <nav class="app-nav app-nav--minimal" id="main-nav" aria-label="Site pages">
+      <a class="nav-link nav-link-active" href="./index.html" aria-current="page">🏠 Home</a>
+      <a class="nav-link" href="./schedule.html">📚 Study</a>
+      <a class="nav-link" href="./plan.html">📅 Plan</a>
+      <a class="nav-link" href="./timers.html">⏱️ Timers</a>
+      <a class="nav-link" href="./tasks.html">✅ Tasks</a>
+      <a class="nav-link" href="./history.html">📜 History</a>
+    </nav>
+
+    <!-- Live status bar -->
+    <div class="home-live-bar" id="home-live-bar">
+      <span class="live-dot"></span>
+      <span id="home-live-text">No session running</span>
+      <span class="home-live-timer" id="home-live-timer"></span>
+    </div>
+
+    <!-- Exam countdowns -->
+    <section class="section section--flat home-countdowns">
+      <div class="countdown-grid countdown-grid--four">
+        <div class="count-card count-card--mains1">
+          <div class="count-card-label">🎯 JEE Mains 2026 — Session 1</div>
+          <div class="count-card-value" id="count-mains1">—</div>
+          <div class="count-card-date">Jan 21–29, 2026</div>
+          <button class="btn-reset-timer" id="reset-mains1" title="Reset to Jan 29, 2026">↺ Reset</button>
+        </div>
+        <div class="count-card count-card--mains2">
+          <div class="count-card-label">🎯 JEE Mains 2026 — Session 2</div>
+          <div class="count-card-value" id="count-mains2">—</div>
+          <div class="count-card-date">Apr 2–8, 2026</div>
+          <button class="btn-reset-timer" id="reset-mains2" title="Reset to Apr 8, 2026">↺ Reset</button>
+        </div>
+        <div class="count-card count-card--trial">
+          <div class="count-card-label">🔥 JEE Advanced 2026</div>
+          <div class="count-card-value" id="count-trial">—</div>
+          <div class="count-card-date">May 17, 2026 · IIT Roorkee</div>
+          <button class="btn-reset-timer" id="reset-trial" title="Reset to May 17, 2026">↺ Reset</button>
+        </div>
+        <div class="count-card count-card--final">
+          <div class="count-card-label">🏆 JEE Advanced 2027 — Final</div>
+          <div class="count-card-value" id="count-final">—</div>
+          <div class="count-card-date">~May 2027 · Expected</div>
+          <button class="btn-reset-timer" id="reset-final" title="Reset to May 17, 2027">↺ Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Today's blocks with one-tap timers -->
+    <section class="section section--flat">
+      <div class="home-section-head">
+        <h2 class="section-label">📖 Today's study blocks</h2>
+        <a class="btn btn-ghost btn--small" href="./schedule.html">Full schedule →</a>
+      </div>
+      <p class="section-hint" id="home-week-line">Loading week…</p>
+      <div id="home-schedule-blocks" class="schedule-blocks"></div>
+    </section>
+
+    <!-- Today's totals -->
+    <section class="section section--flat">
+      <div class="home-section-head">
+        <h2 class="section-label">⏰ Today's time</h2>
+        <a class="btn btn-ghost btn--small" href="./timers.html">All timers →</a>
+      </div>
+      <div class="home-totals-row">
+        <div class="home-total-chip home-total-chip--phy">
+          <span class="home-total-label">⚛️ Physics</span>
+          <strong data-today-total="Physics">0s</strong>
+        </div>
+        <div class="home-total-chip home-total-chip--chem">
+          <span class="home-total-label">🧪 Chemistry</span>
+          <strong data-today-total="Chemistry">0s</strong>
+        </div>
+        <div class="home-total-chip home-total-chip--math">
+          <span class="home-total-label">📐 Mathematics</span>
+          <strong data-today-total="Mathematics">0s</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Doubt & Mistake Journal -->
+    <section class="section section--flat section--doubt">
+      <div class="home-section-head">
+        <h2 class="section-label">💡 Today's doubts & mistakes</h2>
+        <span class="doubt-count" id="doubt-count">0 entries</span>
+      </div>
+      <p class="section-hint">Record every doubt and mistake — review them weekly</p>
+      <div id="doubt-list" class="doubt-list"></div>
+      <div class="add-doubt-form">
+        <select id="doubt-subject" class="doubt-subject-select">
+          <option value="Physics">⚛️ Physics</option>
+          <option value="Chemistry">🧪 Chemistry</option>
+          <option value="Mathematics">📐 Mathematics</option>
+        </select>
+        <textarea id="doubt-text" placeholder="Describe the doubt or mistake in detail..." rows="3"></textarea>
+        <button type="button" class="btn btn-primary" id="btn-add-doubt">💾 Save doubt</button>
+      </div>
+    </section>
+
+    <!-- Tasks -->
+    <section class="section section--flat">
+      <div class="home-section-head">
+        <h2 class="section-label">✅ Today's tasks</h2>
+        <a class="btn btn-ghost btn--small" href="./tasks.html">All tasks →</a>
+      </div>
+      <div id="task-list"></div>
+      <div class="add-task-row add-task-row--simple" style="margin-top:0.75rem;">
+        <input type="text" id="new-task-text" placeholder="Add a task…" aria-label="New task" />
+        <button type="button" class="btn btn-primary btn--small" id="btn-add-task">Add</button>
+      </div>
+    </section>
+
+    <!-- JEE Mains countdowns if any -->
+    <section class="section section--flat" id="mains-section" style="display:none;">
+      <h2 class="section-label">JEE Main countdowns</h2>
+      <div class="countdown-grid" id="mains-countdowns"></div>
+    </section>
+
+    <!-- Motivational footer -->
+    <div class="motivational-footer">
+      <p class="motivation-text">🎯 Every hour counts. Every question matters. IIT Bombay awaits.</p>
+      <p class="motivation-stats">Journey started: <strong>May 3, 2025</strong> · Days to JEE Advanced 2027: <strong id="days-remaining">—</strong></p>
+    </div>
+
+  </div>
+
+  <!-- Block Completion Modal -->
+  <div class="modal-overlay" id="block-completion-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📊 Block Completion</h3>
+        <button class="modal-close" id="close-block-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-subject-info" id="modal-subject-info">Subject: <strong>—</strong></p>
+        <p class="modal-time-info" id="modal-time-info">Time spent: <strong>—</strong></p>
+        
+        <div class="modal-form">
+          <div class="form-field">
+            <label for="questions-total">📝 Total questions attempted</label>
+            <input type="number" id="questions-total" min="0" placeholder="e.g., 30" />
+          </div>
+          
+          <div class="form-field">
+            <label for="questions-correct">✅ Correct answers</label>
+            <input type="number" id="questions-correct" min="0" placeholder="e.g., 25" />
+          </div>
+          
+          <div class="form-field">
+            <label for="questions-wrong">❌ Wrong answers</label>
+            <input type="number" id="questions-wrong" min="0" placeholder="e.g., 5" />
+          </div>
+          
+          <div class="form-field">
+            <label for="questions-remaining">⏳ Remaining questions</label>
+            <input type="number" id="questions-remaining" min="0" placeholder="e.g., 10" />
+            <p class="field-hint">These will be carried over to the next block</p>
+          </div>
+          
+          <div class="form-field">
+            <label for="block-notes">📝 Notes (optional)</label>
+            <textarea id="block-notes" rows="3" placeholder="Any observations, difficult topics, or things to review..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="cancel-block-modal">Cancel</button>
+        <button class="btn btn-primary" id="save-block-completion">💾 Save & Complete</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

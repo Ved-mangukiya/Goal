@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Om — JEE Study Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f7f5f2 0%, #eeebe5 50%, #e5e0d8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .launcher {
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      animation: fadeUp 0.7s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #252218;
+      margin-bottom: 0.35rem;
+    }
+
+    .target {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #003d82;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #5e574c;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .open-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 1rem 2.25rem;
+      background: linear-gradient(135deg, #8a7229 0%, #a68b32 100%);
+      color: #fffdf8;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(138,114,41,0.35);
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      letter-spacing: 0.02em;
+    }
+
+    .open-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(138,114,41,0.45);
+      filter: brightness(1.08);
+    }
+
+    .open-btn:active {
+      transform: translateY(0);
+    }
+
+    .open-btn .arrow {
+      font-size: 1.3rem;
+      transition: transform 0.2s;
+    }
+
+    .open-btn:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .note {
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: #5e574c;
+      opacity: 0.75;
+    }
+
+    .note code {
+      background: rgba(37,34,24,0.08);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    .divider {
+      margin: 1.5rem auto;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #8a7229, #a68b32);
+      border-radius: 2px;
+    }
+
+    .dev-note {
+      margin-top: 1rem;
+      padding: 0.85rem 1.1rem;
+      background: rgba(0,61,130,0.06);
+      border: 1px solid rgba(0,61,130,0.15);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #003d82;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="launcher">
+    <h1>Om's Study Tracker</h1>
+    <p class="target">🎯 Target: IIT Bombay · AIR &lt; 100</p>
+    <p class="subtitle">JEE Advanced 2027 preparation dashboard.<br/>Track study sessions, tasks, doubts, and progress.</p>
+
+    <a class="open-btn" href="./index.html">
+      Open Dashboard <span class="arrow">→</span>
+    </a>
+
+  </div>
+</body>
+</html>
