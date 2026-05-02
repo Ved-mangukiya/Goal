@@ -36,18 +36,34 @@
     </nav>
 
     <section class="section">
-      <h2 class="section-title">Exam date fields</h2>
-      <p class="section-desc">Changing a date updates countdowns and your timetable automatically.</p>
+      <h2 class="section-title">Exam dates</h2>
+      <p class="section-desc">Changing any date instantly updates the countdown timers on the home page.</p>
+
+      <h3 class="settings-group-label">🎯 JEE Mains 2026</h3>
       <div class="form-grid two">
         <div class="field">
-          <label for="input-trial">Trial Advanced date</label>
-          <input type="date" id="input-trial" name="trial" aria-describedby="help-trial" />
-          <span id="help-trial" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your trial Advanced attempt.</span>
+          <label for="input-mains1">Session 1 — last exam day</label>
+          <input type="date" id="input-mains1" name="mains1" />
+          <span class="field-hint">NTA official: Jan 21–29, 2026 → enter Jan 29</span>
         </div>
         <div class="field">
-          <label for="input-final">Final Advanced date</label>
-          <input type="date" id="input-final" name="final" aria-describedby="help-final" />
-          <span id="help-final" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your final Advanced attempt.</span>
+          <label for="input-mains2">Session 2 — last exam day</label>
+          <input type="date" id="input-mains2" name="mains2" />
+          <span class="field-hint">NTA official: Apr 2–8, 2026 → enter Apr 8</span>
+        </div>
+      </div>
+
+      <h3 class="settings-group-label" style="margin-top:1.5rem;">🔥 JEE Advanced</h3>
+      <div class="form-grid two">
+        <div class="field">
+          <label for="input-trial">JEE Advanced 2026 — Trial attempt</label>
+          <input type="date" id="input-trial" name="trial" />
+          <span class="field-hint">IIT Roorkee official: May 17, 2026</span>
+        </div>
+        <div class="field">
+          <label for="input-final">JEE Advanced 2027 — Final attempt</label>
+          <input type="date" id="input-final" name="final" />
+          <span class="field-hint">Not announced yet — estimated May 17, 2027</span>
         </div>
       </div>
 

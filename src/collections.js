@@ -5,5 +5,8 @@ export const COL = {
   session: "session",
   dailyTotals: "dailyTotals",
   tasks: "tasks",
-  studySessions: "studySessions"
+  studySessions: "studySessions",
+  doubts: "doubts",
+  questionTracking: "questionTracking",
+  blockCompletions: "blockCompletions"
 };

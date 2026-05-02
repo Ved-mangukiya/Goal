@@ -1,6 +1,15 @@
 export const weeklyPlan = [
       {
-        week: 1, month: "June 2026", theme: "The Reset — Basic algebra & physics vectors",
+        week: 1, month: "May 2026", theme: "The Reset — Basic algebra & physics vectors",
+        startDate: "2025-05-03",
+        math: { topic: "Basic Maths, Inequalities, Modulus, Wavy Curve Method", book: "Cengage Algebra Ch 1–2", task: "Read theory Ch 1–2, solve CAE Q1–30. Focus on modulus inequalities.", targets: [{ lbl: "CAE Questions", n: 30 }, { lbl: "Modulus/Inequality Sums", n: 10 }], totalQ: 40 },
+        phy: { topic: "Vectors, Basic Calculus for Physics", book: "DC Pandey Mechanics Part 1 Ch 1", task: "Read Chapter 1 fully. Solve Level 1 exercises Q1–30.", targets: [{ lbl: "Level 1 Questions", n: 30 }], totalQ: 30 },
+        chem: { topic: "Mole Concept: Stoichiometry, limiting reagent", book: "N Awasthi Physical Chemistry Ch 1", task: "Chapter 1, Q1–60 (odd numbered). Write all formulas in notebook.", targets: [{ lbl: "N Awasthi Q1–60 (odd)", n: 30 }, { lbl: "NCERT Inorganic (30 min)", n: 0 }], totalQ: 60 },
+        pyq: { topic: "Mole Concept PYQs", task: "Exam Goals: filter Mole Concept JEE Advanced PYQs, solve 15 questions timed (20 min).", targets: [{ lbl: "JEE Adv PYQs (timed)", n: 15 }], totalQ: 15 }
+      },
+      {
+        week: 2, month: "May 2026", theme: "Quadratic equations & kinematics 1D",
+        startDate: "2025-05-10",
         math: { topic: "Basic Maths, Inequalities, Modulus, Wavy Curve Method", book: "Cengage Algebra Ch 1–2", task: "Read theory Ch 1–2, solve CAE Q1–30. Focus on modulus inequalities.", targets: [{ lbl: "CAE Questions", n: 30 }, { lbl: "Modulus/Inequality Sums", n: 10 }], totalQ: 40 },
         phy: { topic: "Vectors, Basic Calculus for Physics", book: "DC Pandey Mechanics Part 1 Ch 1", task: "Read Chapter 1 fully. Solve Level 1 exercises Q1–30.", targets: [{ lbl: "Level 1 Questions", n: 30 }], totalQ: 30 },
         chem: { topic: "Mole Concept: Stoichiometry, limiting reagent", book: "N Awasthi Physical Chemistry Ch 1", task: "Chapter 1, Q1–60 (odd numbered). Write all formulas in notebook.", targets: [{ lbl: "N Awasthi Q1–60 (odd)", n: 30 }, { lbl: "NCERT Inorganic (30 min)", n: 0 }], totalQ: 60 },
@@ -201,6 +210,27 @@ export const weeklyPlan = [
         phy: { topic: "MathonGo mock test sets + DC Pandey revision", book: "MathonGo + DC Pandey", task: "1 full Physics section mock (30 Q, 60 min). Analyse.", targets: [{ lbl: "Mock Section (timed)", n: 30 }], totalQ: 30 },
         chem: { topic: "NCERT Inorganic (s,p,d,f blocks) 1 hr daily + Exam Goals PYQs", book: "NCERT Ch 6–10 + Exam Goals", task: "NCERT Inorganic: 1 full block reading + 30 MCQs from Exam Goals.", targets: [{ lbl: "NCERT Reading", n: 0 }, { lbl: "JEE Main MCQs", n: 30 }], totalQ: 60 },
         pyq: { topic: "JEE Main PYQs daily", task: "Exam Goals: Complete JEE Main paper 2023–2026. Filter by date, solve timed.", targets: [{ lbl: "Full JEE Main Paper", n: 90 }], totalQ: 90 }
+      },
+      {
+        week: 30, month: "January 2027", theme: "JEE Main mock mode — week 2",
+        math: { topic: "Cengage Multiple Correct exercises — all volumes", book: "Cengage all volumes", task: "Multiple Correct exercises from Algebra + Calculus. 45 problems.", targets: [{ lbl: "Multiple Correct", n: 45 }], totalQ: 45 },
+        phy: { topic: "Modern Physics: photoelectric, nuclear, radioactivity", book: "DC Pandey Optics & Modern Physics Ch 4–6", task: "Level 1 Q1–50.", targets: [{ lbl: "Level 1 Q1–50", n: 50 }], totalQ: 50 },
+        chem: { topic: "NCERT Inorganic: d-block, f-block, coordination compounds", book: "NCERT Ch 8–9 + Exam Goals", task: "NCERT reading + 40 MCQs from Exam Goals.", targets: [{ lbl: "NCERT Reading", n: 0 }, { lbl: "Exam Goals MCQs", n: 40 }], totalQ: 40 },
+        pyq: { topic: "JEE Main PYQs — Modern Physics + Inorganic", task: "Exam Goals: 20 Modern Physics + 20 Inorganic PYQs timed.", targets: [{ lbl: "Modern Physics PYQs", n: 20 }, { lbl: "Inorganic PYQs", n: 20 }], totalQ: 40 }
+      },
+      {
+        week: 31, month: "January 2027", theme: "JEE Main mock mode — week 3",
+        math: { topic: "Probability, Complex Numbers, Permutation & Combination", book: "Cengage Algebra Ch 8–10", task: "All CAEs + Single Correct. 50 problems.", targets: [{ lbl: "CAEs + Single Correct", n: 50 }], totalQ: 50 },
+        phy: { topic: "Semiconductors, Communication Systems, Dual Nature", book: "DC Pandey Optics & Modern Physics Ch 7–9", task: "Level 1 Q1–45.", targets: [{ lbl: "Level 1 Q1–45", n: 45 }], totalQ: 45 },
+        chem: { topic: "Biomolecules, Polymers, Chemistry in Everyday Life", book: "NCERT Ch 14–16 + Exam Goals", task: "NCERT reading + 30 MCQs from Exam Goals.", targets: [{ lbl: "NCERT Reading", n: 0 }, { lbl: "Exam Goals MCQs", n: 30 }], totalQ: 30 },
+        pyq: { topic: "Full JEE Main Mock Paper", task: "Exam Goals: Complete JEE Main 2024 paper timed (3 hrs). Full analysis.", targets: [{ lbl: "Full JEE Main Paper", n: 90 }], totalQ: 90 }
+      },
+      {
+        week: 32, month: "January–February 2027", theme: "JEE Main final push + Advanced preview",
+        math: { topic: "Vectors & 3D Geometry — full coverage", book: "Cengage Vectors & 3D", task: "All CAEs + Single Correct. 55 problems.", targets: [{ lbl: "CAEs + Single Correct", n: 55 }], totalQ: 55 },
+        phy: { topic: "Full Physics revision — all chapters rapid fire", book: "DC Pandey all volumes", task: "Re-solve error log from all chapters. 50 problems.", targets: [{ lbl: "Error Log Re-solve", n: 50 }], totalQ: 50 },
+        chem: { topic: "Full Chemistry revision — Organic + Inorganic + Physical", book: "All books", task: "Re-solve error log. 1-page summary per chapter.", targets: [{ lbl: "Error Log Re-solve", n: 50 }], totalQ: 50 },
+        pyq: { topic: "JEE Main 2025 full paper + JEE Advanced preview", task: "Exam Goals: JEE Main 2025 paper timed. Then 20 JEE Advanced PYQs.", targets: [{ lbl: "JEE Main 2025", n: 90 }, { lbl: "JEE Adv Preview", n: 20 }], totalQ: 110 }
       },
       {
         week: 33, month: "February 2027", theme: "Advanced return — Vectors/3D + Optics + Solutions",

@@ -138,18 +138,34 @@ export function bootOmApp(db, pageId = "home") {
     return `${d} days, ${pad2(h)} hours, ${pad2(m)} minutes, ${pad2(s)} seconds`;
   }
 
-  function renderCountdowns(trialStr, finalStr) {
+  function renderCountdowns(trialStr, finalStr, mains1Str, mains2Str) {
     const trialEl = document.getElementById("count-trial");
     const finalEl = document.getElementById("count-final");
+    const mains1El = document.getElementById("count-mains1");
+    const mains2El = document.getElementById("count-mains2");
+    const daysRemainingEl = document.getElementById("days-remaining");
+
     if (!trialEl || !finalEl) {
       return;
     }
+
+    // Use saved dates from settings, fall back to official defaults
+    const MAINS1 = mains1Str || "2026-01-29";
+    const MAINS2 = mains2Str || "2026-04-08";
+    const ADV2026 = trialStr || "2026-05-17";
+    const ADV2027 = finalStr || "2027-05-17";
+
     const tick = () => {
       const now = Date.now();
-      const trialEnd = endOfLocalDayFromDateInput(trialStr).getTime();
-      const finalEnd = endOfLocalDayFromDateInput(finalStr).getTime();
-      trialEl.textContent = formatClock(trialEnd - now);
-      finalEl.textContent = formatClock(finalEnd - now);
+      if (mains1El) mains1El.textContent = formatClock(endOfLocalDayFromDateInput(MAINS1).getTime() - now);
+      if (mains2El) mains2El.textContent = formatClock(endOfLocalDayFromDateInput(MAINS2).getTime() - now);
+      trialEl.textContent = formatClock(endOfLocalDayFromDateInput(ADV2026).getTime() - now);
+      finalEl.textContent = formatClock(endOfLocalDayFromDateInput(ADV2027).getTime() - now);
+
+      if (daysRemainingEl) {
+        const daysLeft = Math.max(0, Math.ceil((endOfLocalDayFromDateInput(ADV2027).getTime() - now) / 86400000));
+        daysRemainingEl.textContent = daysLeft;
+      }
     };
     tick();
     if (window.__countdownTimer) {
@@ -189,7 +205,7 @@ export function bootOmApp(db, pageId = "home") {
     if (!root) {
       return;
     }
-    const finalStr = settings.jeeAdvancedFinalDate || "2027-05-23";
+    const finalStr = settings.jeeAdvancedFinalDate || "2027-05-17";
     const dateKey = toDateKey(new Date());
     const rows = buildTimetableRows(settings, dateKey, finalStr, SUBJECTS);
     const wObj = getActiveWeekObject(settings);
@@ -267,19 +283,29 @@ export function bootOmApp(db, pageId = "home") {
   }
 
   function applySettingsToUi(data) {
-    const trialStr = data.jeeAdvancedTrialDate || "2026-05-24";
-    const finalStr = data.jeeAdvancedFinalDate || "2027-05-23";
+    const trialStr = data.jeeAdvancedTrialDate || "2026-05-17";
+    const finalStr = data.jeeAdvancedFinalDate || "2027-05-17";
+    const mains1Str = data.jeeMains1Date || "2026-01-29";
+    const mains2Str = data.jeeMains2Date || "2026-04-08";
     const trial = document.getElementById("input-trial");
     const fin = document.getElementById("input-final");
-    if (trial) {
-      trial.value = trialStr;
-    }
-    if (fin) {
-      fin.value = finalStr;
-    }
-    renderCountdowns(trialStr, finalStr);
+    const m1 = document.getElementById("input-mains1");
+    const m2 = document.getElementById("input-mains2");
+    if (trial) trial.value = trialStr;
+    if (fin) fin.value = finalStr;
+    if (m1) m1.value = mains1Str;
+    if (m2) m2.value = mains2Str;
+    renderCountdowns(trialStr, finalStr, mains1Str, mains2Str);
     renderScheduleUnified(data);
     renderMainsCountdowns(data.jeeMainsList || []);
+    // home page specific
+    if (pageId === "home") {
+      renderHomeScheduleBlocks(data);
+      const mainsSection = document.getElementById("mains-section");
+      if (mainsSection) {
+        mainsSection.style.display = (data.jeeMainsList && data.jeeMainsList.length) ? "" : "none";
+      }
+    }
   }
 
   async function commitDocumentReplace(ref, nextData, successToast) {
@@ -378,7 +404,7 @@ export function bootOmApp(db, pageId = "home") {
     }
     const data = window.__lastSettings || {};
     const dk = od.value || toDateKey(new Date());
-    const finalStr = data.jeeAdvancedFinalDate || "2027-05-23";
+    const finalStr = data.jeeAdvancedFinalDate || "2027-05-17";
     const overrides = data.timetableDailyOverrides || {};
     const mode = data.timetableMode === "daily" ? "daily" : "fixed";
     let slots;
@@ -627,6 +653,8 @@ export function bootOmApp(db, pageId = "home") {
     }
     const trial = document.getElementById("input-trial");
     const fin = document.getElementById("input-final");
+    const m1 = document.getElementById("input-mains1");
+    const m2 = document.getElementById("input-mains2");
     if (!trial || !fin) {
       return;
     }
@@ -634,7 +662,7 @@ export function bootOmApp(db, pageId = "home") {
     trial.addEventListener("change", () => {
       commitSettingsMerged(
         { jeeAdvancedTrialDate: trial.value },
-        "Exam dates saved. Your timetable updated automatically."
+        "JEE Advanced 2026 date saved."
       ).catch((e) => {
         toast("Could not save. Check internet and Firebase rules.");
         console.error(e);
@@ -643,12 +671,34 @@ export function bootOmApp(db, pageId = "home") {
     fin.addEventListener("change", () => {
       commitSettingsMerged(
         { jeeAdvancedFinalDate: fin.value },
-        "Exam dates saved. Your timetable updated automatically."
+        "JEE Advanced 2027 date saved."
       ).catch((e) => {
         toast("Could not save. Check internet and Firebase rules.");
         console.error(e);
       });
     });
+    if (m1) {
+      m1.addEventListener("change", () => {
+        commitSettingsMerged(
+          { jeeMains1Date: m1.value },
+          "JEE Mains Session 1 date saved."
+        ).catch((e) => {
+          toast("Could not save. Check internet and Firebase rules.");
+          console.error(e);
+        });
+      });
+    }
+    if (m2) {
+      m2.addEventListener("change", () => {
+        commitSettingsMerged(
+          { jeeMains2Date: m2.value },
+          "JEE Mains Session 2 date saved."
+        ).catch((e) => {
+          toast("Could not save. Check internet and Firebase rules.");
+          console.error(e);
+        });
+      });
+    }
   }
 
   function renderMainsEditor(list) {
@@ -728,10 +778,10 @@ export function bootOmApp(db, pageId = "home") {
       const data = snap.exists() ? snap.data() : {};
       window.__lastSettings = data;
       if (!data.jeeAdvancedTrialDate) {
-        data.jeeAdvancedTrialDate = "2026-05-24";
+        data.jeeAdvancedTrialDate = "2026-05-17";
       }
       if (!data.jeeAdvancedFinalDate) {
-        data.jeeAdvancedFinalDate = "2027-05-23";
+        data.jeeAdvancedFinalDate = "2027-05-17";
       }
       applySettingsToUi(data);
       renderMainsEditor(data.jeeMainsList || []);
@@ -834,12 +884,18 @@ export function bootOmApp(db, pageId = "home") {
     localTimerInterval = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startedAtMs) / 1000);
       const text = formatDuration(elapsed);
+      const shortText = formatDurationShort(elapsed);
       document.querySelectorAll(`[data-running-live="${subject}"]`).forEach((el) => {
         el.textContent = text;
       });
       const legacy = document.getElementById(`running-${subject}`);
       if (legacy) {
         legacy.textContent = text;
+      }
+      // home bar live timer
+      const homeTimer = document.getElementById("home-live-timer");
+      if (homeTimer) {
+        homeTimer.textContent = shortText;
       }
     }, 500);
   }
@@ -1092,7 +1148,12 @@ export function bootOmApp(db, pageId = "home") {
         (t, index) =>
           `<div class='task-row ${t.done ? "done" : ""}' data-index='${index}'>` +
           `<input type='checkbox' ${t.done ? "checked" : ""} aria-label='Mark done' />` +
-          `<label>${escapeHtml(t.text)}</label></div>`
+          `<label class="task-text">${escapeHtml(t.text)}</label>` +
+          `<div class="task-actions">` +
+          `<button class="task-edit-btn" data-index="${index}" title="Edit task">✏️</button>` +
+          `<button class="task-delete-btn" data-index="${index}" title="Delete task">🗑️</button>` +
+          `</div>` +
+          `</div>`
       )
       .join("");
 
@@ -1107,6 +1168,31 @@ export function bootOmApp(db, pageId = "home") {
           completedAt: cb.checked ? Date.now() : null
         };
         commitTasksChange(dateKey, next).catch(console.error);
+      });
+    });
+
+    // Wire edit buttons
+    root.querySelectorAll(".task-edit-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const index = Number(btn.getAttribute("data-index"));
+        const task = items[index];
+        const newText = prompt("Edit task:", task.text);
+        if (newText && newText.trim() && newText.trim() !== task.text) {
+          const next = items.slice();
+          next[index] = { ...next[index], text: newText.trim() };
+          commitTasksChange(dateKey, next).catch(console.error);
+        }
+      });
+    });
+
+    // Wire delete buttons
+    root.querySelectorAll(".task-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const index = Number(btn.getAttribute("data-index"));
+        if (confirm("Delete this task?")) {
+          const next = items.filter((_, i) => i !== index);
+          commitTasksChange(dateKey, next).catch(console.error);
+        }
       });
     });
   }
@@ -1283,6 +1369,434 @@ export function bootOmApp(db, pageId = "home") {
     });
   }
 
+  function setGreeting() {
+    const el = document.getElementById("greeting-text");
+    if (!el) return;
+    const h = new Date().getHours();
+    if (h < 12) el.textContent = "Good morning,";
+    else if (h < 17) el.textContent = "Good afternoon,";
+    else el.textContent = "Good evening,";
+  }
+
+  function renderHomeLiveBar(d) {
+    const bar = document.getElementById("home-live-bar");
+    const text = document.getElementById("home-live-text");
+    const timer = document.getElementById("home-live-timer");
+    if (!bar || !text) return;
+    const running = isLiveSessionRunning(d, SUBJECTS);
+    if (running) {
+      bar.classList.add("home-live-bar--active");
+      text.textContent = `Studying ${d.subject}`;
+      if (timer) timer.style.display = "";
+    } else {
+      bar.classList.remove("home-live-bar--active");
+      text.textContent = "No session running — tap Start on a block below";
+      if (timer) { timer.style.display = "none"; timer.textContent = ""; }
+    }
+  }
+
+  function renderHomeScheduleBlocks(settings) {
+    const root = document.getElementById("home-schedule-blocks");
+    if (!root) return;
+    const finalStr = settings.jeeAdvancedFinalDate || "2027-05-17";
+    const dateKey = toDateKey(new Date());
+    const rows = buildTimetableRows(settings, dateKey, finalStr, SUBJECTS);
+    const wObj = getActiveWeekObject(settings);
+
+    const weekLine = document.getElementById("home-week-line");
+    if (weekLine) {
+      weekLine.textContent = `Week ${wObj.week} · ${wObj.month} — ${wObj.theme || ""}`;
+    }
+
+    const subSlug = (s) =>
+      s === "Mathematics" ? "mathematics" : s === "Physics" ? "physics" : "chemistry";
+
+    root.innerHTML = rows.map((r) => {
+      const p = planSliceForSubject(wObj, r.subject);
+      const topic = p && p.topic ? `<p class="study-block__topic">${escapeHtml(p.topic)}</p>` : "";
+      const task = p && p.task ? `<p class="study-block__task">${escapeHtml(p.task)}</p>` : "";
+      const targetQ = p && p.totalQ ? p.totalQ : 0;
+      const sub = escapeHtml(r.subject);
+      return (
+        `<article class="study-block study-block--${subSlug(r.subject)}" data-subject="${sub}" data-start="${escapeHtml(r.start)}" data-end="${escapeHtml(r.end)}" data-target-q="${targetQ}">` +
+        `<div class="study-block__head">` +
+        `<span class="study-block__time">${escapeHtml(r.start)}–${escapeHtml(r.end)}</span>` +
+        `<span class="study-block__subject">${sub}</span></div>` +
+        `<div class="study-block__plan">${topic}${task}</div>` +
+        `<div class="study-block__timer">` +
+        `<span class="study-block__live" data-running-live="${sub}">—</span>` +
+        `<div class="study-block__timer-btns">` +
+        `<button type="button" class="btn btn-timer-start timer-subject-start" data-subject="${sub}">▶ Start</button>` +
+        `<button type="button" class="btn btn-timer-stop timer-subject-stop" data-subject="${sub}" disabled>■ Stop</button>` +
+        `<button type="button" class="btn btn-complete-block" data-subject="${sub}">✓ Complete</button>` +
+        `</div>` +
+        `<span class="study-block__today">Today <strong data-today-total="${sub}">0s</strong></span>` +
+        `</div></article>`
+      );
+    }).join("");
+
+    resyncLiveTimersAfterScheduleRender();
+    wireCompleteBlockButtons();
+  }
+
+  function subscribeHomeLiveSession() {
+    const ref = doc(db, COL.live, COL.session);
+    const u = onSnapshot(ref, (snap) => {
+      const d = snap.exists() ? snap.data() : {};
+      applyLiveSessionToDom(d);
+      renderHomeLiveBar(d);
+      // update live timer label in home bar
+      const timerEl = document.getElementById("home-live-timer");
+      if (timerEl && isLiveSessionRunning(d, SUBJECTS)) {
+        timerEl.style.display = "";
+      }
+    });
+    unsubscribers.push(u);
+  }
+
+  // ── Doubt Journal Functions ──────────────────────────────────────
+
+  function subscribeDoubts(dateKey) {
+    const doubtList = document.getElementById("doubt-list");
+    if (!doubtList) return;
+    
+    const ref = doc(db, COL.doubts, dateKey);
+    const u = onSnapshot(ref, (snap) => {
+      const data = snap.exists() && snap.data().items ? snap.data().items : [];
+      renderDoubts(dateKey, data);
+    });
+    unsubscribers.push(u);
+  }
+
+  function renderDoubts(dateKey, items) {
+    const root = document.getElementById("doubt-list");
+    const countEl = document.getElementById("doubt-count");
+    if (!root) return;
+    
+    if (countEl) {
+      countEl.textContent = `${items.length} ${items.length === 1 ? 'entry' : 'entries'}`;
+    }
+    
+    if (!items.length) {
+      root.innerHTML = "<p class='empty-state'>No doubts recorded today. Keep going! 💪</p>";
+      return;
+    }
+    
+    root.innerHTML = items.map((doubt, index) => {
+      const time = doubt.timestamp ? new Date(doubt.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '';
+      return `
+        <div class="doubt-item" data-index="${index}">
+          <div class="doubt-item-head">
+            <span class="doubt-subject-tag doubt-subject-tag--${escapeHtml(doubt.subject)}">${escapeHtml(doubt.subject)}</span>
+            <span class="doubt-time">${time}</span>
+          </div>
+          <p class="doubt-text">${escapeHtml(doubt.text)}</p>
+          <button class="doubt-delete" data-index="${index}">🗑️ Delete</button>
+        </div>
+      `;
+    }).join("");
+    
+    // Wire delete buttons
+    root.querySelectorAll(".doubt-delete").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const index = Number(btn.getAttribute("data-index"));
+        const next = items.filter((_, i) => i !== index);
+        commitDoubtsChange(dateKey, next).catch(console.error);
+      });
+    });
+  }
+
+  async function commitDoubtsChange(dateKey, nextItems) {
+    const ref = doc(db, COL.doubts, dateKey);
+    const snap = await getDoc(ref);
+    const had = snap.exists();
+    const prev = had ? snap.data() : null;
+    const nextPayload = {
+      items: nextItems,
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(ref, nextPayload);
+    if (isApplyingHistory()) {
+      return;
+    }
+    recordAction({
+      undo: async () => {
+        if (!had) {
+          await deleteDoc(ref);
+        } else {
+          await setDoc(ref, prev);
+        }
+      },
+      redo: async () => {
+        await setDoc(ref, {
+          items: nextItems,
+          updatedAt: serverTimestamp()
+        });
+      }
+    });
+  }
+
+  function wireAddDoubtOnce() {
+    const btn = document.getElementById("btn-add-doubt");
+    if (!btn || btn.dataset.wired) return;
+    btn.dataset.wired = "true";
+    
+    btn.addEventListener("click", () => {
+      const subjectSelect = document.getElementById("doubt-subject");
+      const textArea = document.getElementById("doubt-text");
+      const subject = subjectSelect.value;
+      const text = textArea.value.trim();
+      
+      if (!text) {
+        toast("Please describe the doubt or mistake.");
+        return;
+      }
+      
+      const dateKey = toDateKey(new Date());
+      const ref = doc(db, COL.doubts, dateKey);
+      
+      getDoc(ref).then((snap) => {
+        const cur = snap.exists() && snap.data().items ? snap.data().items : [];
+        const nextItems = [
+          ...cur,
+          {
+            id: `doubt_${Date.now()}`,
+            subject,
+            text,
+            timestamp: Date.now()
+          }
+        ];
+        return commitDoubtsChange(dateKey, nextItems).then(() => {
+          textArea.value = "";
+          toast("💡 Doubt saved!");
+        });
+      }).catch(console.error);
+    });
+  }
+
+  // ── Timer Reset Functions ────────────────────────────────────────
+
+  function wireTimerResets() {
+    // Each reset saves the default date to Firestore so the countdown
+    // immediately reflects the change on all devices.
+    const resets = [
+      {
+        id: "reset-mains1",
+        label: "JEE Mains 2026 Session 1",
+        defaultDate: "2026-01-29",
+        settingsKey: "jeeMains1Date",
+        display: "Jan 29, 2026"
+      },
+      {
+        id: "reset-mains2",
+        label: "JEE Mains 2026 Session 2",
+        defaultDate: "2026-04-08",
+        settingsKey: "jeeMains2Date",
+        display: "Apr 8, 2026"
+      },
+      {
+        id: "reset-trial",
+        label: "JEE Advanced 2026",
+        defaultDate: "2026-05-17",
+        settingsKey: "jeeAdvancedTrialDate",
+        display: "May 17, 2026"
+      },
+      {
+        id: "reset-final",
+        label: "JEE Advanced 2027",
+        defaultDate: "2027-05-17",
+        settingsKey: "jeeAdvancedFinalDate",
+        display: "May 17, 2027"
+      }
+    ];
+
+    resets.forEach(({ id, label, defaultDate, settingsKey, display }) => {
+      const btn = document.getElementById(id);
+      if (!btn || btn.dataset.wired) return;
+      btn.dataset.wired = "true";
+      btn.addEventListener("click", () => {
+        if (confirm(`Reset ${label} countdown to ${display}?`)) {
+          commitSettingsMerged({ [settingsKey]: defaultDate }, `${label} reset to ${display}.`)
+            .catch((e) => {
+              toast("Could not reset. Check internet and Firebase rules.");
+              console.error(e);
+            });
+        }
+      });
+    });
+  }
+
+  // ── Block Completion Modal Functions ────────────────────────────
+
+  let currentBlockData = null;
+
+  function wireCompleteBlockButtons() {
+    document.querySelectorAll(".btn-complete-block").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "true";
+      
+      btn.addEventListener("click", () => {
+        const subject = btn.getAttribute("data-subject");
+        const block = btn.closest(".study-block");
+        const startTime = block.getAttribute("data-start");
+        const endTime = block.getAttribute("data-end");
+        const targetQ = Number(block.getAttribute("data-target-q")) || 0;
+        
+        // Get today's total time for this subject
+        const totalEl = block.querySelector(`[data-today-total="${subject}"]`);
+        const timeSpent = totalEl ? totalEl.textContent : "0s";
+        
+        currentBlockData = {
+          subject,
+          startTime,
+          endTime,
+          targetQ,
+          timeSpent,
+          dateKey: toDateKey(new Date())
+        };
+        
+        openBlockCompletionModal();
+      });
+    });
+  }
+
+  function openBlockCompletionModal() {
+    const modal = document.getElementById("block-completion-modal");
+    const subjectInfo = document.getElementById("modal-subject-info");
+    const timeInfo = document.getElementById("modal-time-info");
+    
+    if (!modal || !currentBlockData) return;
+    
+    subjectInfo.innerHTML = `Subject: <strong>${escapeHtml(currentBlockData.subject)}</strong> (${currentBlockData.startTime}–${currentBlockData.endTime})`;
+    timeInfo.innerHTML = `Time spent: <strong>${escapeHtml(currentBlockData.timeSpent)}</strong>`;
+    
+    // Clear previous inputs
+    document.getElementById("questions-total").value = "";
+    document.getElementById("questions-correct").value = "";
+    document.getElementById("questions-wrong").value = "";
+    document.getElementById("questions-remaining").value = "";
+    document.getElementById("block-notes").value = "";
+    
+    // Suggest target questions
+    if (currentBlockData.targetQ > 0) {
+      document.getElementById("questions-total").placeholder = `Target: ${currentBlockData.targetQ} questions`;
+    }
+    
+    modal.classList.add("modal-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeBlockCompletionModal() {
+    const modal = document.getElementById("block-completion-modal");
+    if (!modal) return;
+    
+    modal.classList.remove("modal-open");
+    document.body.style.overflow = "";
+    currentBlockData = null;
+  }
+
+  async function saveBlockCompletion() {
+    if (!currentBlockData) return;
+    
+    const total = Number(document.getElementById("questions-total").value) || 0;
+    const correct = Number(document.getElementById("questions-correct").value) || 0;
+    const wrong = Number(document.getElementById("questions-wrong").value) || 0;
+    const remaining = Number(document.getElementById("questions-remaining").value) || 0;
+    const notes = document.getElementById("block-notes").value.trim();
+    
+    if (total === 0) {
+      toast("Please enter the total questions attempted.");
+      return;
+    }
+    
+    if (correct + wrong > total) {
+      toast("Correct + Wrong cannot exceed Total questions.");
+      return;
+    }
+    
+    const blockCompletion = {
+      id: `block_${Date.now()}`,
+      dateKey: currentBlockData.dateKey,
+      subject: currentBlockData.subject,
+      startTime: currentBlockData.startTime,
+      endTime: currentBlockData.endTime,
+      timeSpent: currentBlockData.timeSpent,
+      questionsTotal: total,
+      questionsCorrect: correct,
+      questionsWrong: wrong,
+      questionsRemaining: remaining,
+      accuracy: total > 0 ? Math.round((correct / total) * 100) : 0,
+      notes: notes,
+      completedAt: serverTimestamp()
+    };
+    
+    try {
+      const ref = doc(collection(db, COL.blockCompletions));
+      await setDoc(ref, blockCompletion);
+      
+      // If there are remaining questions, add them to carryover
+      if (remaining > 0) {
+        await addCarryoverQuestions(currentBlockData.subject, remaining, currentBlockData.dateKey);
+      }
+      
+      toast(`✅ Block completed! Accuracy: ${blockCompletion.accuracy}%`);
+      closeBlockCompletionModal();
+    } catch (e) {
+      toast("Could not save block completion.");
+      console.error(e);
+    }
+  }
+
+  async function addCarryoverQuestions(subject, count, fromDateKey) {
+    const carryoverRef = doc(db, COL.questionTracking, "carryover");
+    const snap = await getDoc(carryoverRef);
+    const current = snap.exists() ? snap.data().items || [] : [];
+    
+    const newCarryover = {
+      id: `carry_${Date.now()}`,
+      subject,
+      count,
+      fromDateKey,
+      addedAt: Date.now()
+    };
+    
+    await setDoc(carryoverRef, {
+      items: [...current, newCarryover],
+      updatedAt: serverTimestamp()
+    });
+  }
+
+  function wireBlockCompletionModal() {
+    const closeBtn = document.getElementById("close-block-modal");
+    const cancelBtn = document.getElementById("cancel-block-modal");
+    const saveBtn = document.getElementById("save-block-completion");
+    const modal = document.getElementById("block-completion-modal");
+    
+    if (closeBtn && !closeBtn.dataset.wired) {
+      closeBtn.dataset.wired = "true";
+      closeBtn.addEventListener("click", closeBlockCompletionModal);
+    }
+    
+    if (cancelBtn && !cancelBtn.dataset.wired) {
+      cancelBtn.dataset.wired = "true";
+      cancelBtn.addEventListener("click", closeBlockCompletionModal);
+    }
+    
+    if (saveBtn && !saveBtn.dataset.wired) {
+      saveBtn.dataset.wired = "true";
+      saveBtn.addEventListener("click", saveBlockCompletion);
+    }
+    
+    if (modal && !modal.dataset.wired) {
+      modal.dataset.wired = "true";
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeBlockCompletionModal();
+        }
+      });
+    }
+  }
+
   function boot() {
     unsubscribers.forEach((fn) => {
       if (typeof fn === "function") {
@@ -1293,14 +1807,16 @@ export function bootOmApp(db, pageId = "home") {
     const dateKey = toDateKey(new Date());
     const needsSettings = ["home", "schedule", "settings", "plan"].includes(pageId);
 
+    setGreeting();
+
     const todayEl = document.getElementById("today-label");
     if (todayEl) {
-      todayEl.textContent = `Today is ${new Date().toLocaleDateString("en-GB", {
+      todayEl.textContent = new Date().toLocaleDateString("en-GB", {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric"
-      })}.`;
+      });
     }
 
     if (pageId === "plan") {
@@ -1325,6 +1841,17 @@ export function bootOmApp(db, pageId = "home") {
       }
       weekTicker = setInterval(() => subscribeWeekMonth(), 60000);
     }
+    if (pageId === "home") {
+      subscribeTodayTotals(dateKey);
+      subscribeHomeLiveSession();
+      wireTimerDelegationOnce();
+      wireAddTaskOnce();
+      subscribeTasks(dateKey);
+      subscribeDoubts(dateKey);
+      wireAddDoubtOnce();
+      wireTimerResets();
+      wireBlockCompletionModal();
+    }
     if (pageId === "tasks") {
       wireAddTaskOnce();
       subscribeTasks(dateKey);
@@ -1336,3 +1863,4 @@ export function bootOmApp(db, pageId = "home") {
 
   boot();
 }
+
