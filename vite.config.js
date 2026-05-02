@@ -4,10 +4,11 @@ import { fileURLToPath } from "url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
+// Use VITE_BASE env var if set (for GitHub Pages CI), otherwise "./" for local
+const base = process.env.VITE_BASE ?? "./";
+
 export default defineConfig({
-  // Set to your GitHub repo name so all asset paths work on GitHub Pages
-  // URL will be: https://ved-mangukiya.github.io/Goal/
-  base: "/Goal/",
+  base,
   publicDir: "public",
   build: {
     outDir: "dist",
