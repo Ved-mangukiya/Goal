@@ -14,6 +14,7 @@ export default defineConfig({
     outDir: "dist",
     rollupOptions: {
       input: {
+        launcher: resolve(__dirname, "open-app.html"),
         main: resolve(__dirname, "index.html"),
         schedule: resolve(__dirname, "schedule.html"),
         timers: resolve(__dirname, "timers.html"),

@@ -60,22 +60,26 @@ export async function exportFullDatabase(db) {
   return snapshot;
 }
 
-export async function wipeAllStudyData(db) {
+export async function wipeAllStudyData(db, preserveSettings = false) {
+  // Always wipe study data
   await deleteCollectionDocs(db, COL.studySessions);
   await deleteCollectionDocs(db, COL.tasks);
   await deleteCollectionDocs(db, COL.dailyTotals);
+  await deleteCollectionDocs(db, COL.doubts);
+  await deleteCollectionDocs(db, COL.blockCompletions);
+  await deleteCollectionDocs(db, COL.questionTracking);
 
-  const genRef = doc(db, COL.settings, COL.general);
+  // Always clear the live session
   const liveRef = doc(db, COL.live, COL.session);
-  try {
-    await deleteDoc(genRef);
-  } catch (_) {
-    /* empty */
-  }
-  try {
-    await deleteDoc(liveRef);
-  } catch (_) {
-    /* empty */
+  try { await deleteDoc(liveRef); } catch (_) { /* empty */ }
+
+  if (!preserveSettings) {
+    // Full wipe — also delete settings
+    const genRef = doc(db, COL.settings, COL.general);
+    try { await deleteDoc(genRef); } catch (_) { /* empty */ }
+  } else {
+    // Preserve settings but strip out nothing — exam dates stay intact
+    // (settings doc is left completely untouched)
   }
 }
 

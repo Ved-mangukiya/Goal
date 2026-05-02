@@ -1257,33 +1257,26 @@ export function bootOmApp(db, pageId = "home") {
     });
     btnReset.addEventListener("click", () => {
       const w1 = window.confirm(
-        "This will delete every exam setting, timer log, daily total, and task in the database. Are you sure you want to continue?"
+        "This will delete all timer logs, daily totals, tasks, doubts, and session history.\n\nYour exam dates and timetable settings will be KEPT.\n\nAre you sure?"
       );
       if (!w1) {
-        return;
-      }
-      const w2 = window.confirm(
-        "Final check: all study data for this app will be removed from Firestore. Tap OK only if you understand."
-      );
-      if (!w2) {
         return;
       }
       exportFullDatabase(db)
         .then(async (snapshot) => {
           clearHistory();
-          await wipeAllStudyData(db);
+          // preserveSettings = true → exam dates and timetable are kept
+          await wipeAllStudyData(db, true);
           recordAction({
             undo: async () => {
-              await wipeAllStudyData(db);
+              await wipeAllStudyData(db, true);
               await restoreFullDatabase(db, snapshot);
             },
             redo: async () => {
-              await wipeAllStudyData(db);
+              await wipeAllStudyData(db, true);
             }
           });
-          toast(
-            "Database was cleared. Use Undo last change to bring everything back."
-          );
+          toast("✅ Study data cleared. Exam dates kept. Use Undo to restore.");
         })
         .catch((e) => {
           toast("Reset failed. Check the browser console.");

@@ -27,6 +27,14 @@ jobs:
       - name: Build
         run: npm run build:gh
 
+      - name: Set launcher as site root
+        # Rename built files so open-app.html becomes the entry point
+        # and the dashboard moves to dashboard.html
+        run: |
+          cp dist/index.html dist/dashboard.html
+          cp dist/open-app.html dist/index.html
+          sed -i 's|href="./index.html"|href="./dashboard.html"|g' dist/index.html
+
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
