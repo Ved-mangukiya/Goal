@@ -1,7 +1,10 @@
+// Use this file with the current app (no sign-in).
+// For rules that require login, see firestore.rules.require-auth.example instead.
+// Never paste two rule sets into one file.
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Open access: only for private family use. Anyone with your site link can read/write.
     match /{document=**} {
       allow read, write: if true;
     }

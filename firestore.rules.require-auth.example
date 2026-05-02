@@ -1,0 +1,29 @@
+// Example ONLY if you add Firebase Authentication (e.g. Anonymous) back to the app.
+// Father page: read allowed without auth. Om page: write requires signed-in user.
+// Rename to firestore.rules and deploy, or paste into the console Rules tab.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /live/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /dailyTotals/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /tasks/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /studySessions/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

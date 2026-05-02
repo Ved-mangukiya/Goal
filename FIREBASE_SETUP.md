@@ -35,6 +35,7 @@ service cloud.firestore {
 - Rules were never published after editing (you must click **Publish**).
 - The database was created in **production mode** with the default “deny all” rules — you must replace them with the block above.
 - You edited rules on a **different Firebase project** than the one in `src/firebase-config.js` (check **projectId** matches).
+- **Two rule sets were pasted into one file** (for example `request.auth` rules and `if true` rules together). There must be only **one** `rules_version` and **one** `service cloud.firestore { ... }` block. Use **`firestore.rules`** in this project as the correct open-rules template.
 
 **Security note:** `if true` means anyone who has your page URL can change data. That matches a private family setup. For stronger protection later, add Firebase Authentication and tighten rules.
 
