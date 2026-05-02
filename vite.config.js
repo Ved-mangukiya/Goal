@@ -5,9 +5,12 @@ import { fileURLToPath } from "url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
-  base: "./",
+  // Set to your GitHub repo name so all asset paths work on GitHub Pages
+  // URL will be: https://ved-mangukiya.github.io/Goal/
+  base: "/Goal/",
   publicDir: "public",
   build: {
+    outDir: "dist",
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
