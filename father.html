@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ઓમ — અભ્યાસ ડેશબોર્ડ (કુટુંબ દૃશ્ય)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+</head>
+<body class="father-page">
+  <div class="app-wrap">
+    <header class="site-header father-header">
+      <div class="brand">
+        <span class="brand-title">ઓમ માટે અભ્યાસ નિરીક્ષણ</span>
+        <span class="brand-sub gu-muted">આ પેજ માત્ર વાંચવા માટે છે. ડેટા આપમેળે અપડેટ થાય છે.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill" id="father-clock">—</span>
+        <a class="btn btn-ghost" href="./index.html">વિદ્યાર્થી પૃષ્ઠ (અંગ્રેજી)</a>
+      </div>
+    </header>
+
+    <div id="father-setup" class="section hidden" style="border-color:#c45c4a;"></div>
+
+    <section class="section">
+      <h2 class="section-title">આજે શું ચાલી રહ્યું છે</h2>
+      <p class="section-desc gu-muted">ઓમ હમણાં કયા વિષય પર ભણી રહ્યો છે તે લાઇવ દેખાય છે.</p>
+      <p id="father-live" class="timer-readout" style="font-size:1.25rem;">—</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">આજનો વિષય પ્રમાણે સમય</h2>
+      <p class="section-desc gu-muted">આજના દિવસમાં દરેક વિષય માટે કુલ અભ્યાસ સમય.</p>
+      <ul class="timetable-list" id="father-today-times"></ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">આજની ચેકલિસ્ટ</h2>
+      <p class="section-desc gu-muted">ઓમે આજ માટે લખેલા કામો. ટીક કરેલું એ પૂર્ણ ગણાય.</p>
+      <ul class="timetable-list" id="father-tasks"></ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">આજનો સમયપત્રક</h2>
+      <p class="section-desc gu-muted">આજે કયા સમયે કયો વિષય આવે છે તે યાદી.</p>
+      <ul class="timetable-list" id="father-timetable"></ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">સંપૂર્ણ સત્ર ઇતિહાસ</h2>
+      <p class="section-desc gu-muted">દરેક સાચવેલો અભ્યાસ સત્ર — તારીખ, વિષય અને સમય.</p>
+      <div class="log-table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th scope="col">તારીખ</th>
+              <th scope="col">વિષય</th>
+              <th scope="col">સમયગાળો</th>
+              <th scope="col">પૂર્ણ સમય</th>
+            </tr>
+          </thead>
+          <tbody id="father-history"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="footer-note gu-muted">
+      આ પેજ ફક્ત જોવા માટે છે. ફેરફાર કરવા ઓમના મુખ્ય પૃષ્ઠ પર જાઓ.
+    </p>
+  </div>
+
+  <script type="module" src="./src/father-main.js"></script>
+</body>
+</html>

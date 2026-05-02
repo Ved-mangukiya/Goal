@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Open access: only for private family use. Anyone with your site link can read/write.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

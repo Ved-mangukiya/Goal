@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Om — Study Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:1100px;"></div>
+
+  <div class="app-wrap" id="main-app">
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-title">Om — Study Command Center</span>
+        <span class="brand-sub">Joint Entrance Examination preparation, clear and calm.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill" id="today-label">Today</span>
+        <a class="btn btn-ghost" href="./father.html">Family view (Gujarati)</a>
+      </div>
+    </header>
+
+    <nav class="app-nav" id="main-nav" aria-label="Page sections">
+      <a class="nav-link" href="#nav-home">Home</a>
+      <a class="nav-link" href="#nav-schedule">Schedule</a>
+      <a class="nav-link" href="#nav-timers">Timers</a>
+      <a class="nav-link" href="#nav-tasks">Tasks</a>
+      <a class="nav-link" href="#nav-history">History</a>
+      <a class="nav-link" href="#nav-settings">Settings</a>
+    </nav>
+
+    <section class="section nav-target" id="nav-home">
+      <h2 class="section-title">Home — exam countdowns</h2>
+      <p class="section-desc">Live clocks until the end of each exam day. They update every second.</p>
+      <div class="countdown-grid">
+        <div class="count-card">
+          <div class="count-card-label">Joint Entrance Examination Advanced 2026 (trial attempt)</div>
+          <div class="count-card-value" id="count-trial">—</div>
+        </div>
+        <div class="count-card">
+          <div class="count-card-label">Joint Entrance Examination Advanced 2027 (final attempt)</div>
+          <div class="count-card-value" id="count-final">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section nav-target" id="nav-schedule">
+      <h2 class="section-title">Schedule — today’s timetable</h2>
+      <p class="section-desc">Suggested blocks based on days left until your final Advanced date. Adjust if your coaching plan differs.</p>
+      <ul class="timetable-list" id="timetable-body"></ul>
+    </section>
+
+    <section class="section nav-target" id="nav-timers">
+      <h2 class="section-title">Timers — subject study clock</h2>
+      <p class="section-desc">Run one timer at a time. Stopping saves time to today, this week, and this month.</p>
+      <div class="timer-grid">
+        <article class="timer-card">
+          <h3>Physics</h3>
+          <p class="section-desc" style="margin-bottom:0;">Today total</p>
+          <p id="today-Physics" class="timer-readout">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This week</p>
+          <p id="week-Physics">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This month</p>
+          <p id="month-Physics">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">Live session</p>
+          <p id="running-Physics" class="timer-readout" style="font-size:1.1rem;">Not running</p>
+          <div class="timer-actions">
+            <button type="button" class="btn btn-primary" id="start-Physics">Start Physics timer</button>
+            <button type="button" class="btn" id="stop-Physics">Stop Physics timer and save</button>
+          </div>
+        </article>
+        <article class="timer-card">
+          <h3>Chemistry</h3>
+          <p class="section-desc" style="margin-bottom:0;">Today total</p>
+          <p id="today-Chemistry" class="timer-readout">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This week</p>
+          <p id="week-Chemistry">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This month</p>
+          <p id="month-Chemistry">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">Live session</p>
+          <p id="running-Chemistry" class="timer-readout" style="font-size:1.1rem;">Not running</p>
+          <div class="timer-actions">
+            <button type="button" class="btn btn-primary" id="start-Chemistry">Start Chemistry timer</button>
+            <button type="button" class="btn" id="stop-Chemistry">Stop Chemistry timer and save</button>
+          </div>
+        </article>
+        <article class="timer-card">
+          <h3>Mathematics</h3>
+          <p class="section-desc" style="margin-bottom:0;">Today total</p>
+          <p id="today-Mathematics" class="timer-readout">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This week</p>
+          <p id="week-Mathematics">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">This month</p>
+          <p id="month-Mathematics">0 seconds</p>
+          <p class="section-desc" style="margin-bottom:0;">Live session</p>
+          <p id="running-Mathematics" class="timer-readout" style="font-size:1.1rem;">Not running</p>
+          <div class="timer-actions">
+            <button type="button" class="btn btn-primary" id="start-Mathematics">Start Mathematics timer</button>
+            <button type="button" class="btn" id="stop-Mathematics">Stop Mathematics timer and save</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section nav-target" id="nav-tasks">
+      <h2 class="section-title">Tasks — daily checklist</h2>
+      <p class="section-desc">Today’s list only. Checked items store the time you checked them.</p>
+      <div id="task-list"></div>
+      <div class="add-task-row">
+        <input type="text" id="new-task-text" placeholder="Example: Finish thirty Physics questions from the problem book" aria-label="New task description" />
+        <button type="button" class="btn btn-primary" id="btn-add-task">Add task for today</button>
+      </div>
+    </section>
+
+    <section class="section nav-target" id="nav-history">
+      <h2 class="section-title">History — study sessions</h2>
+      <p class="section-desc">Each saved timer session with date, subject, and length.</p>
+      <div class="log-table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th scope="col">Calendar date</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Finished time</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section nav-target" id="nav-settings">
+      <h2 class="section-title">Settings — exam dates and database</h2>
+      <p class="section-desc">Change Advanced trial and final dates, manage Main exam rows, undo mistakes, or reset all stored data.</p>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.25rem;">Exam date fields</h3>
+      <p class="section-desc">Changing a date updates countdowns and your timetable automatically.</p>
+      <div class="form-grid two">
+        <div class="field">
+          <label for="input-trial">Trial Advanced date</label>
+          <input type="date" id="input-trial" name="trial" aria-describedby="help-trial" />
+          <span id="help-trial" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your trial Advanced attempt.</span>
+        </div>
+        <div class="field">
+          <label for="input-final">Final Advanced date</label>
+          <input type="date" id="input-final" name="final" aria-describedby="help-final" />
+          <span id="help-final" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your final Advanced attempt.</span>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.5rem;">Joint Entrance Examination Main dates</h3>
+      <p class="section-desc">Add each Main attempt. Countdown cards appear below.</p>
+      <div id="mains-countdowns" class="countdown-grid" style="margin-bottom:1rem;"></div>
+      <button type="button" class="btn btn-primary" id="btn-add-mains">Add another Main exam row</button>
+      <div id="mains-editor" class="form-grid" style="margin-top:1rem;"></div>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.5rem;">Undo, redo, and full reset</h3>
+      <p class="section-desc">Undo reverses the last change made on this device. Reset deletes everything in the database; you can Undo once to restore the snapshot taken before reset.</p>
+      <div class="toolbar">
+        <button type="button" class="btn" id="btn-undo" disabled>Undo last change</button>
+        <button type="button" class="btn" id="btn-redo" disabled>Redo last undone change</button>
+        <button type="button" class="btn btn-danger" id="btn-reset-database">Reset entire database</button>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      <strong>Why two folders?</strong> The <code>index.html</code> and <code>father.html</code> in the project root are the <strong>source</strong> for developers. After you run <code>npm run build</code>, Vite writes a fresh copy into the <code>dist</code> folder — that is what you upload to GitHub Pages. Only the <code>dist</code> site needs to be public.
+    </p>
+  </div>
+
+  <script type="module" src="./src/om-main.js"></script>
+</body>
+</html>
