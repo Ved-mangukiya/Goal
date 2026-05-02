@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study — Om</title>
+</head>
+
+<body class="site-minimal" data-om-page="schedule">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:720px;"></div>
+
+  <div class="app-wrap app-wrap--narrow" id="main-app">
+    <header class="site-header site-header--minimal">
+      <div class="brand">
+        <span class="brand-title">Study</span>
+        <span class="brand-sub">Blocks, weekly targets, and timers stay in sync.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill status-pill--quiet" id="today-label">Today</span>
+        <a class="btn btn-ghost btn--small" href="./father.html">Family</a>
+      </div>
+    </header>
+
+    <nav class="app-nav app-nav--minimal" id="main-nav" aria-label="Site pages">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link nav-link-active" href="./schedule.html" aria-current="page">Study</a>
+      <a class="nav-link" href="./plan.html">Plan</a>
+      <a class="nav-link" href="./timers.html">Timers</a>
+      <a class="nav-link" href="./tasks.html">Tasks</a>
+      <a class="nav-link" href="./history.html">History</a>
+      <a class="nav-link" href="./settings.html">Settings</a>
+    </nav>
+
+    <div id="weekly-plan-banner" class="week-banner"></div>
+
+    <section class="section section--flat">
+      <h2 class="section-label">Today’s blocks</h2>
+      <p class="section-hint">Times follow Settings. Each block shows this week’s work for that subject.</p>
+      <div id="schedule-blocks" class="schedule-blocks"></div>
+    </section>
+
+    <section id="schedule-pyq" class="section section--flat section--pyq" hidden></section>
+  </div>
+
+  <script type="module" src="./src/om-main.js"></script>
+</body>
+
+</html>

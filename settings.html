@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Om Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+
+<body class="site-minimal" data-om-page="settings">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="setup-alert" class="section app-wrap hidden" style="margin:1.25rem auto;max-width:720px;"></div>
+
+  <div class="app-wrap app-wrap--narrow" id="main-app">
+    <header class="site-header site-header--minimal">
+      <div class="brand">
+        <span class="brand-title">Settings</span>
+        <span class="brand-sub">Dates, timetable blocks, database.</span>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill status-pill--quiet" id="today-label">Today</span>
+        <a class="btn btn-ghost btn--small" href="./father.html">Family</a>
+      </div>
+    </header>
+
+    <nav class="app-nav app-nav--minimal" id="main-nav" aria-label="Site pages">
+      <a class="nav-link" href="./index.html">Home</a>
+      <a class="nav-link" href="./schedule.html">Study</a>
+      <a class="nav-link" href="./plan.html">Plan</a>
+      <a class="nav-link" href="./timers.html">Timers</a>
+      <a class="nav-link" href="./tasks.html">Tasks</a>
+      <a class="nav-link" href="./history.html">History</a>
+      <a class="nav-link nav-link-active" href="./settings.html" aria-current="page">Settings</a>
+    </nav>
+
+    <section class="section">
+      <h2 class="section-title">Exam date fields</h2>
+      <p class="section-desc">Changing a date updates countdowns and your timetable automatically.</p>
+      <div class="form-grid two">
+        <div class="field">
+          <label for="input-trial">Trial Advanced date</label>
+          <input type="date" id="input-trial" name="trial" aria-describedby="help-trial" />
+          <span id="help-trial" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your trial Advanced attempt.</span>
+        </div>
+        <div class="field">
+          <label for="input-final">Final Advanced date</label>
+          <input type="date" id="input-final" name="final" aria-describedby="help-final" />
+          <span id="help-final" class="section-desc" style="margin-top:0.35rem;margin-bottom:0;">The calendar day of your final Advanced attempt.</span>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.5rem;">Timetable — block start and end times</h3>
+      <p class="section-desc">
+        <strong>Fixed:</strong> the same blocks every day (with an optional extra evening row when you are close to the final exam).
+        <strong>Daily:</strong> keep that as the default, but set different blocks for specific dates when you need to.
+      </p>
+      <div class="field" style="margin-bottom:0.75rem;">
+        <span class="section-desc" style="display:block;margin-bottom:0.35rem;">Mode</span>
+        <label class="inline-radio"><input type="radio" name="timetable-mode" id="timetable-mode-fixed" value="fixed" checked /> Fixed blocks every day</label>
+        <label class="inline-radio" style="margin-left:1rem;"><input type="radio" name="timetable-mode" id="timetable-mode-daily" value="daily" /> Custom blocks per day (pick a date below)</label>
+      </div>
+      <div class="field" style="margin-bottom:1rem;">
+        <label class="inline-check">
+          <input type="checkbox" id="timetable-auto-evening" checked />
+          When 45 days or fewer remain before the <strong>final Advanced</strong> date, add an extra block 20:15–22:00 on days that use the default template (not on fully custom daily overrides).
+        </label>
+      </div>
+      <p class="section-desc" style="margin-bottom:0.35rem;"><strong>Default blocks</strong> (used every day in Fixed mode, and on days without a custom day in Daily mode)</p>
+      <div id="timetable-fixed-rows" class="timetable-editor-rows"></div>
+      <button type="button" class="btn btn-ghost" id="btn-timetable-add-fixed" style="margin-top:0.5rem;">Add another block</button>
+
+      <div id="timetable-daily-panel" class="hidden" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+        <p class="section-title" style="font-size:1.15rem;">Custom blocks for one calendar day</p>
+        <p class="section-desc">Choose a date, adjust times, then save. That day ignores the default template until you clear it.</p>
+        <div class="form-grid two" style="align-items:end;max-width:36rem;">
+          <div class="field">
+            <label for="timetable-override-date">Date</label>
+            <input type="date" id="timetable-override-date" />
+          </div>
+          <div class="toolbar" style="margin:0;">
+            <button type="button" class="btn btn-primary" id="btn-timetable-save-daily">Save this day’s blocks</button>
+            <button type="button" class="btn btn-ghost" id="btn-timetable-clear-daily">Clear custom day</button>
+          </div>
+        </div>
+        <div id="timetable-daily-rows" class="timetable-editor-rows" style="margin-top:0.75rem;"></div>
+        <button type="button" class="btn btn-ghost" id="btn-timetable-add-daily" style="margin-top:0.5rem;">Add block for this day</button>
+      </div>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.5rem;">Joint Entrance Examination Main dates</h3>
+      <p class="section-desc">Add each Main attempt. Countdown cards appear below.</p>
+      <div id="mains-countdowns" class="countdown-grid" style="margin-bottom:1rem;"></div>
+      <button type="button" class="btn btn-primary" id="btn-add-mains">Add another Main exam row</button>
+      <div id="mains-editor" class="form-grid" style="margin-top:1rem;"></div>
+
+      <h3 class="section-title" style="font-size:1.25rem;margin-top:1.5rem;">Undo, redo, and full reset</h3>
+      <p class="section-desc">Undo reverses the last change made on this device. Reset deletes everything in the database; you can Undo once to restore the snapshot taken before reset.</p>
+      <div class="toolbar">
+        <button type="button" class="btn" id="btn-undo" disabled>Undo last change</button>
+        <button type="button" class="btn" id="btn-redo" disabled>Redo last undone change</button>
+        <button type="button" class="btn btn-danger" id="btn-reset-database">Reset entire database</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./src/om-main.js"></script>
+</body>
+
+</html>

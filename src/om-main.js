@@ -26,5 +26,6 @@ if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
       }
     })
     .catch(() => {});
-  bootOmApp(db);
+  const page = document.body.dataset.omPage || "home";
+  bootOmApp(db, page);
 }

@@ -10,6 +10,8 @@ import {
   normalizeStartedAtMs,
   isLiveSessionRunning
 } from "./session-utils.js";
+import { buildTimetableRows } from "./timetable-utils.js";
+import { weeklyPlan } from "./weekly-plan-data.js";
 
 const SUBJECT_GU = {
   Physics: "ભૌતિક વિજ્ઞાન",
@@ -28,6 +30,14 @@ const COL = {
 };
 
 export function bootFatherApp(db) {
+  function activeWeekFromSettings(data) {
+    let wNum = Number(data && data.currentPrepWeek);
+    if (!weeklyPlan.some((w) => w.week === wNum)) {
+      wNum = weeklyPlan[0].week;
+    }
+    return weeklyPlan.find((w) => w.week === wNum) || weeklyPlan[0];
+  }
+
   function pad2(n) {
     return String(n).padStart(2, "0");
   }
@@ -58,38 +68,6 @@ export function bootFatherApp(db) {
     return d.innerHTML;
   }
 
-  function endOfLocalDayFromDateInput(dateStr) {
-    const parts = dateStr.split("-").map(Number);
-    if (parts.length !== 3) {
-      return new Date();
-    }
-    return new Date(parts[0], parts[1] - 1, parts[2], 23, 59, 59, 999);
-  }
-
-  function buildTimetable(finalExamDateStr) {
-    const examEnd = endOfLocalDayFromDateInput(finalExamDateStr);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const daysLeft = Math.max(0, Math.ceil((examEnd - today) / 86400000));
-    const daySeed = Math.floor(today.getTime() / 86400000);
-    const subjects = ["Physics", "Chemistry", "Mathematics"];
-    const slots = [
-      { start: "06:30", end: "08:30" },
-      { start: "09:15", end: "11:15" },
-      { start: "11:45", end: "13:15" },
-      { start: "15:30", end: "17:30" },
-      { start: "18:00", end: "20:00" }
-    ];
-    if (daysLeft <= 45) {
-      slots.push({ start: "20:15", end: "22:00" });
-    }
-    return slots.map((slot, index) => ({
-      start: slot.start,
-      end: slot.end,
-      subject: subjects[(daySeed + index) % subjects.length]
-    }));
-  }
-
   function tickClock() {
     const el = document.getElementById("father-clock");
     const now = new Date();
@@ -107,7 +85,14 @@ export function bootFatherApp(db) {
   onSnapshot(doc(db, COL.settings, COL.general), (snap) => {
     const data = snap.exists() ? snap.data() : {};
     const finalStr = data.jeeAdvancedFinalDate || "2027-05-23";
-    const rows = buildTimetable(finalStr);
+    const dateKey = toDateKey(new Date());
+    const subjects = ["Physics", "Chemistry", "Mathematics"];
+    const rows = buildTimetableRows(data, dateKey, finalStr, subjects);
+    const wk = activeWeekFromSettings(data);
+    const weekEl = document.getElementById("father-week-focus");
+    if (weekEl) {
+      weekEl.textContent = `સપ્તાહ ${wk.week} · ${wk.theme || ""}`;
+    }
     document.getElementById("father-timetable").innerHTML = rows
       .map(
         (r) =>

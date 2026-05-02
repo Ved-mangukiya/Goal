@@ -11,6 +11,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
+        schedule: resolve(__dirname, "schedule.html"),
+        timers: resolve(__dirname, "timers.html"),
+        tasks: resolve(__dirname, "tasks.html"),
+        history: resolve(__dirname, "history.html"),
+        settings: resolve(__dirname, "settings.html"),
+        plan: resolve(__dirname, "plan.html"),
         father: resolve(__dirname, "father.html")
       }
     }
