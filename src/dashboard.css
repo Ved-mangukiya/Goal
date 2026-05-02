@@ -1760,3 +1760,6 @@ body.site-minimal::before {
   margin-top: 0.3rem;
   font-style: italic;
 }
+
+/* cache-bust: v3 */
+:root { --cache-v: 3; }
